@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Models\User;
+use App\Models\Phone;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,7 +25,13 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('home');
+
+Route::get('/users', function(){
+    return Inertia::render('Users', [
+        'user' => User::with('phone.comment')->get(),
+    ]);
+})->name('users');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
