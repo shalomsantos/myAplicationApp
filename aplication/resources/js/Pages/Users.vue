@@ -6,8 +6,13 @@
                 class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded w-fit"
                 >Exit</Link
             >
+            <DataTable :value="user" tableStyle="min-width: 50rem">
+                <Column field="id" header="id"></Column>
+                <Column field="name" header="nome"></Column>
+                <Column field="email" header="e-mail"></Column>
+            </DataTable>
 
-            <div class="table w-full ...">
+            <!-- <div class="table w-full ...">
                 <div class="table-header-group ...">
                     <div class="table-row">
                         <div class="table-cell text-left ...">Id</div>
@@ -27,12 +32,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </section>
 </template>
 <script setup>
 import { Link } from '@inertiajs/vue3';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 
 const props = defineProps({
     user: { default: null }
