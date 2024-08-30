@@ -2,7 +2,7 @@
     <v-layout class="rounded rounded-md">
         <v-navigation-drawer v-model="drawer" :width="200" color="blue-grey-lighten-5">
             <v-list density="compact">
-                <v-list-item title="Base Zero" link href="#"/>
+                <v-list-item title="Base Zero" link :href="route('home')"/>
                 <v-list-group>
                     <template v-slot:activator="{ props }">
                         <v-list-item v-bind="props">Cadastro</v-list-item>
@@ -12,7 +12,7 @@
                         <p class="text-decoration-none text-grey-darken-1">{{ item.text }}</p>
                     </v-list-item>
                 </v-list-group>
-                <v-list-item title="Usuários" link href="#"/>
+                <v-list-item title="Usuários" link href="users"/>
             </v-list>
         </v-navigation-drawer>
         <v-app-bar color="blue-grey-darken-1">
@@ -50,7 +50,7 @@
             </v-menu>
         </v-app-bar>
 
-        <v-main class="d-flex align-center justify-center" color="grey-lighten-5" style="min-height: 300px">
+        <v-main class="" color="grey-lighten-5" style="min-height: 100%">
             <slot/>
         </v-main>
     </v-layout>
