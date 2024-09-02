@@ -15,7 +15,7 @@
                 <v-list-item title="Usuários" link href="users"/>
             </v-list>
         </v-navigation-drawer>
-        <v-app-bar color="blue-grey-darken-1">
+        <v-app-bar color="blue-grey-darken-2">
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>
                 <v-breadcrumbs :items="breadcrumbs"></v-breadcrumbs>
@@ -24,10 +24,7 @@
 
             <v-menu>
                 <template v-slot:activator="{ props }">
-                    <v-btn variant="tonal" v-bind="props">
-                        <!-- <p class="text-capitalize">Shalom santos</p> -->
-                        <v-icon icon="mdi-login"/>
-                    </v-btn>
+                    <v-btn v-bind="props" icon="mdi-account-arrow-right"/>
                 </template>
                 <v-card min-width="300">
                     <v-list density="compact">
@@ -40,17 +37,19 @@
 
                     <v-list density="compact">
                         <v-list-item>
-                            <Link :href="route('profile.edit')" class="text-decoration-none text-black pr-16 py-16">Perfil</Link>
+                            <v-icon icon="mdi-account-cog"></v-icon>
+                            <Link :href="route('profile.edit')" class="text-decoration-none text-black pl-2 py-16" style="padding-right: 50%;">Perfil</Link>
                         </v-list-item>
                         <v-list-item>
-                            <Link :href="route('logout')" method="post" class="text-decoration-none text-black pr-16 py-16">Sair</Link>
+                            <v-icon icon="mdi-exit-to-app"></v-icon>
+                            <Link :href="route('logout')" method="post" class="text-decoration-none text-black pl-2 py-16" style="padding-right: 50%;">Sair</Link>
                         </v-list-item>
                     </v-list>
                 </v-card>
             </v-menu>
         </v-app-bar>
 
-        <v-main class="" color="grey-lighten-5" style="min-height: 100%">
+        <v-main color="grey-lighten-5" style="min-height: 100%">
             <slot/>
         </v-main>
     </v-layout>
