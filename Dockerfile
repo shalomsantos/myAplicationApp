@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
 	libpq-dev
 
-RUN docker-php-ext-install pdo pdo_mysql mysqli gd pgsql pdo_pgsql
+RUN docker-php-ext-install pdo pdo_mysql mysqli gd pgsql pdo_pgsql sockets
 
 RUN docker-php-ext-configure zip \
     && docker-php-ext-install zip

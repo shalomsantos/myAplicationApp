@@ -1,0 +1,4 @@
+conf/mysql/data
+conf/redis/data
+conf/rabbitmq/data
+.git
