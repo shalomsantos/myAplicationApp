@@ -32,7 +32,7 @@
                     </v-col>
                 </v-row>
             </v-col>
-            <v-col cols="4" v-if="dados.length > 0 && viewOption" v-for="(item, id) in dados" :key="id">
+            <v-col cols="6" v-if="dados.length > 0 && viewOption" v-for="(item, id) in dados" :key="id">
                 <v-hover class="h-100">
                     <template v-slot:default="{ isHovering, props }">
                         <v-card

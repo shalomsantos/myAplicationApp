@@ -101,7 +101,7 @@
                                 class="h-auto rounded"
                                 min-height="160"
                                 color="green-lighten-5"
-                                @click.prevent="dialogAdicionaritem=true"
+                                @click.prevent="dialogAdicionarItem=true"
                             ></v-btn>
                             <v-card
                                 v-for="itemPivot in item.itens_pivot"
@@ -129,7 +129,7 @@
                                                 ></v-btn>
                                             </template>
                                             <v-list
-                                                :items="items"
+                                                :items="obterItensMenu(itemPivot)"
                                                 density="compact"
                                             />
                                         </v-menu>
@@ -217,7 +217,7 @@
                                 class="rounded"
                                 density="comfortable"
                                 color="green-lighten-5"
-                                @click.prevent="dialogAdicionaritem=true"
+                                @click.prevent="dialogAdicionarItem=true"
                             ></v-btn>
                             <h4 class="text-green-darken-3">
                                 <v-icon
@@ -284,7 +284,10 @@
                                         density="compact"
                                     ></v-btn>
                                 </template>
-                                <v-list :items="items" density="compact" />
+                                <v-list 
+                                    :items="obterItensMenu(itemPivot)"
+                                    density="compact" 
+                                />
                             </v-menu>
                         </v-col>
                     </v-row>
@@ -295,18 +298,24 @@
             </v-col>
         </v-row>
         <IncluirItem
-            v-model="dialogAdicionaritem" 
-            @incluirProcess="incluirItem"
-            @onCloseDialog="dialogAdicionaritem=false"
+            v-model="dialogAdicionarItem" 
+            @incluirProcess="((dialogAdicionarItem=false))"
+            @onCloseDialog="dialogAdicionarItem=false"
         />
-        <NormalFeedback v-model="feedback" />
+        <EditarItem
+            v-model="dialogEditarItem"
+            :itemEdited="itemEdited"
+            @incluirProcess="((dialogEditarItem=false))"
+            @onCloseDialog="dialogEditarItem=false"
+        />
     </DefaultLayout>
 </template>
 
 <script setup>
-import NormalFeedback from "@/Components/Feedback/NormalFeedback.vue";
 import IncluirItem from "@/Components/Dialogs/Bzero/IncluirItem.vue";
+import EditarItem from "@/Components/Dialogs/Bzero/EditarItem.vue";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
+import { useFeedback } from "@/Composables/useFeedback";
 import EmptyData from "@/Components/EmptyData.vue";
 import { ref, computed } from "vue";
 import axios from "axios";
@@ -317,31 +326,31 @@ const props = defineProps({
     plataformas: Object,
 });
 
+const { trigger } = useFeedback();
+
 const location = [
     { title: "Kronos", disabled: false, href: "/" },
     { title: "Base", disabled: true },
     { title: "Edição", disabled: true },
 ];
 
-const viewOption = ref(props.preferencias?.listagem_menu ?? 0);
-const dados = ref(props.bzero);
-const valuePlataforma = ref(null);
-const plataformas = computed(() => props.plataformas);
-const dialogAdicionaritem = ref(null);
+const viewOption          = ref(props.preferencias?.listagem_menu ?? 0);
+const dados               = ref(props.bzero);
+const valuePlataforma     = ref(null);
+const plataformas         = computed(() => props.plataformas);
+const itemEdited          = ref(null)
+const dialogAdicionarItem = ref(null);
+const dialogEditarItem    = ref(null);
 
-const feedback = ref({
-    show: false,
-    timeout: 2000,
-    color: "success",
-    text: "",
-});
-
-const items = [
+const obterItensMenu = (item) => [
     {
         title: "Anexar",
         value: 1,
         props: {
             prependIcon: "mdi-tag",
+            onClick: () => {
+                console.log("Anexar no ID:", item); 
+            }
         },
     },
     {
@@ -349,9 +358,16 @@ const items = [
         value: 2,
         props: {
             prependIcon: "mdi-pencil",
+            onClick: () => {
+                openEditeItem(item);
+            }
         },
     },
 ];
+function openEditeItem(item) {
+    itemEdited.value = item;
+    dialogEditarItem.value = true;
+}
 
 async function associarPlataforma() {
     await axios
@@ -362,28 +378,13 @@ async function associarPlataforma() {
             if (res.data.success) {
                 dados.value = res.data.data;
                 valuePlataforma.value = null;
-                feedback.value = {
-                    show: true,
-                    timeout: 3000,
-                    color: "success",
-                    text: res.data.message,
-                };
+                trigger(res.data.message, 'success')
                 return;
             }
-            feedback.value = {
-                show: true,
-                timeout: 3000,
-                color: "error",
-                text: res.data.message,
-            };
+            trigger(res.data.message, 'error')
         })
         .catch((err) => {
-            feedback.value = {
-                show: true,
-                timeout: 3000,
-                color: "error",
-                text: err.data.message,
-            };
+            trigger(err.data.message, 'error')
         });
 }
 </script>
