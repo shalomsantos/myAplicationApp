@@ -1,3 +1,5 @@
+[![My Skills](https://skillicons.dev/icons?i=php,laravel,mysql,docker,nginx,nodejs,vue,vuetify,nuxtjs)](https://skillicons.dev)
+
 ## Passo a passo para rodar o projeto
 Clone o projeto e depois acesse a pasta
 ```sh
