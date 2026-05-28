@@ -43,6 +43,7 @@
                             v-bind="props"
                             :title="item.nome"
                             prepend-icon="mdi-sitemap"
+                            class="border-s-lg"
                             :color="isHovering ? 'green-lighten-5' : undefined"
                             @click.prevent="
                                 ((subitemSelecionado = item),

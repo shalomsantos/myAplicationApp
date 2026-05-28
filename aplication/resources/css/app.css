@@ -9,3 +9,6 @@ html{
 tbody tr:hover {
     background-color: #E8F5E9;
 }
+.v-card.border-s-lg {
+    border-color: #81c784 !important;
+}

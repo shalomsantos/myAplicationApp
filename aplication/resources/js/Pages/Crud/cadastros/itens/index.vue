@@ -18,7 +18,7 @@
                             clearable
                             append-inner-icon="mdi-magnify"
                             @keydown.enter="executarBusca"
-                            @click:clear="carregandoTodasItens('')"
+                            @click:clear="limparBusca"
                         />
                     </v-col>
                     <v-col align="end">
@@ -49,7 +49,7 @@
                                 ((itemSelecionado = item),
                                 (dialogEditeItem = true))
                             "
-                            class="h-100 d-flex flex-column" 
+                            class="h-100 d-flex flex-column border-s-lg" 
                         >
                             <template #subtitle>
                                 <v-sheet class="d-flex justify-space-between align-end" color="transparent">
@@ -167,7 +167,8 @@ import { useFeedback } from "@/Composables/useFeedback";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import EmptyData from "@/Components/EmptyData.vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useItem } from "@/Composables/useItem";
 
 const props = defineProps({
     itens: Object,
@@ -175,41 +176,40 @@ const props = defineProps({
     user: Object,
     preferencias: Object,
 });
+
 const location = [
     { title: "Kronos", disabled: false, href: "/" },
     { title: "Itens", disabled: true },
     { title: "Lista", disabled: true },
 ];
+
 const { trigger } = useFeedback();
+const { dados, carregarDados, finding } = useItem();
+
+watch(() => props.itens, (novosItens) => { if (novosItens) dados.value = novosItens }, { immediate: true });
 
 const viewOption = ref(props.preferencias?.listagem_menu ?? 0);
-const dados = ref(props.itens ?? []);
 const itemSelecionado = ref(null);
 const search = ref("");
+
 // Dialogs
 const dialogEditeItem = ref(false);
 const dialogNovoItem = ref(false);
+
 // functions
-async function insertItem(item) {}
+async function insertItem() {
+    const res = await carregarDados()
+    dialogNovoItem.value = false;
+    dados.value = res;
+}
+
 function editItem(item) {
     console.log(item)
 }
-const executarBusca = async () => {
-    await carregandoTodasItens(search.value);
-};
-async function carregandoTodasItens(termo = "") {
-    await axios
-        .get(route("item.index"), {
-            params: { search: termo },
-            headers: {
-                Accept: "application/json",
-            },
-        })
-        .then((res) => {
-            dados.value = res.data;
-        })
-        .catch((err) => trigger(err, "error"));
-}
+
+const executarBusca = async () => { await finding(search.value) }
+
+async function limparBusca() { await finding('') }
 </script>
 
 <style scoped>

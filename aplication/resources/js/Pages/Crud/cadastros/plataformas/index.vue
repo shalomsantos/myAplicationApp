@@ -44,7 +44,7 @@
                                 (dialogEditePlataforma = true))
                             "
                             :elevation="isHovering ? 3 : 1"
-                            class="h-100 d-flex flex-column" 
+                            class="h-100 d-flex flex-column border-s-lg" 
                         >
                             <template #subtitle>
                                 <v-sheet class="d-flex justify-space-between align-end" color="transparent">

@@ -19,10 +19,12 @@ class ItemController extends Controller
             $query = Item::query()->orderBy('id', 'desc'); // dados
             $Subitem = Subitem::query()->orderBy('id', 'desc')->select(['id', 'nome']); // opções
 
-            if ($request->expectsJson()) return response()->json($query->get());
-
-            if ($request->filled('search')) $query->where('nome', 'like', "%{$request->search}%");
-
+            if ($request->filled('search')) {
+                $query->where('nome', 'like', "%{$request->search}%");
+            }
+            if ($request->expectsJson()) {
+                return response()->json($query->get());
+            }
             $usuario_logado = auth()->user();
             $preferencias = $usuario_logado->preferencia;
 
@@ -50,7 +52,29 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $itemStore = Item::insert([
+                'nome' => $request->input('nome'),
+                'created_by' => auth()->id(),
+                'created_at' => now(),
+            ]);
+            if ($itemStore) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Registro criado com sucesso."
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Houve um erro na criação do registro."
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro ao tentar inserir registro.",
+                'details' => $e->getMessage()
+            ]);
+        }
     }
 
     /**

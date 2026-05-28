@@ -3,32 +3,39 @@
         v-model="model"
         width="60vw"
         title="Editar ou vincular subitens a este item?"
-        @onCloseDialog="$emit('closeEvent')"
+        @onCloseDialog="((isEditingName = false), ($emit('closeEvent')))"
     >
         <v-row>
             <v-col cols="5">
                 <v-row>
-                    <v-col class="d-flex align-center ga-3 mb-0 pb-0">
-                        <h4 class="text-green-darken-4">
-                            {{ inputItemNome }}
-                        </h4>
+                    <v-col v-if="isEditingName" class="d-flex align-center ga-3 mb-0 pb-0">
+                        <v-text-field
+                            v-model="inputItemNome" 
+                            variant="outlined" 
+                            density="compact"
+                            color="green-darken-3"
+                            hide-details
+                            clearable
+                        />
+                        <v-btn
+                            class="rounded"
+                            icon="mdi-check"
+                            variant="tonal"
+                            size="x-small"
+                            color="green-darken-4"
+                            @click.prevent="saveNameItem()"
+                        ></v-btn>
+                    </v-col>
+                    <v-col v-else class="d-flex align-center ga-3 mb-0 pb-0">
+                        <h4 class="text-green-darken-4"> {{ inputItemNome }} </h4>
                         <v-btn
                             class="rounded"
                             icon="mdi-pencil"
                             variant="tonal"
                             size="x-small"
                             color="green-darken-4"
-                            @click.prevent
+                            @click.prevent="isEditingName = !isEditingName"
                         ></v-btn>
-
-                        <!-- <v-text-field
-                            v-model="inputItemNome"
-                            label="Nome do item*"
-                            variant="outlined"
-                            density="compact"
-                            hide-details="auto"
-                            clearable
-                        ></v-text-field> -->
                     </v-col>
                     <v-col cols="12">
                         <v-combobox
@@ -69,13 +76,6 @@
                             class="text-none w-100"
                             color="green-darken-1"
                             prepend-icon="mdi-playlist-plus"
-                            text="teste"
-                            @click.prevent="relodOptions"
-                        />
-                        <v-btn
-                            class="text-none w-100"
-                            color="green-darken-1"
-                            prepend-icon="mdi-playlist-plus"
                             text="Adicionar"
                             :disabled="!inputSubitem"
                             @click.prevent="dialogConfirmation = true"
@@ -106,13 +106,7 @@
                                 </p>
                             </td>
                             <td>
-                                <v-chip
-                                    size="x-small"
-                                    color="green"
-                                    variant="flat"
-                                >
-                                    {{ item.created_by.name }}
-                                </v-chip>
+                                <Avatar :nomeCompleto="item.created_by.name" />
                             </td>
                             <td>
                                 <v-btn
@@ -136,7 +130,7 @@
             subtitle="Vincular um subitem a um item deixa ele disponível para utilizar na edição da base zero, mas este mesmo item nao pode ser utilizado ou 'visto' por outro."
             v-model="dialogConfirmation"
             @confirmed="carregandoSubitensPeloitem"
-            @canceled="((inputSubitem=null), (dialogConfirmation = false))"
+            @canceled="((inputSubitem = null), (dialogConfirmation = false))"
         />
     </Dialog>
 </template>
@@ -149,6 +143,7 @@ import Confirmation from "../Confirmation.vue";
 import { ref, computed, watch } from "vue";
 import Dialog from "../Dialog.vue";
 import axios from "axios";
+import Avatar from "@/Components/Bases/Avatar.vue";
 
 const model = defineModel();
 const emit = defineEmits(["editeProcess"]);
@@ -159,6 +154,8 @@ const props = defineProps({
 });
 const { trigger } = useFeedback();
 const { index } = useSubitem();
+
+const isEditingName = ref(false);
 // input text
 const itemId = computed(() => props.item?.id ?? null);
 const inputItemNome = ref("");
@@ -179,12 +176,7 @@ watch(
     },
     { immediate: true },
 );
-async function relodOptions() {
-    const res =  await index();
-    subitens.value = res;
-}
 async function carregandoSubitensPeloitem() {
-    return;
     await axios
         .post(route("subitem.subitensAssociaveis"), { itemId: itemId.value })
         .then((res) => {
@@ -196,8 +188,11 @@ async function carregandoSubitensPeloitem() {
         })
         .catch((err) => trigger(err, "error"));
 }
+async function saveNameItem(){
+    console.log(inputItemNome.value)
+}
 function deleteItem() {
-    confirmation.value = true;
+    dialogConfirmation.value = true;
 }
 </script>
 

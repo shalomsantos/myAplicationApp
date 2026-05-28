@@ -44,6 +44,7 @@
                             v-bind="props"
                             :title="item.razao_social"
                             prepend-icon="mdi-store"
+                            class="border-s-lg"
                             :elevation="isHovering ? 3 : 1"
                             @click.prevent="
                                 ((fornecedorSelecionado = item),

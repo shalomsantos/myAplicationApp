@@ -52,6 +52,7 @@
                                     v-bind="props"
                                     :title="item.nome"
                                     prepend-icon="mdi-clipboard"
+                                    class="border-s-lg"
                                     @click.prevent="
                                         ((projetoSelecionado = item),
                                         (dialogEditProjeto = true))

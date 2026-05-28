@@ -390,9 +390,6 @@ async function associarPlataforma() {
 </script>
 
 <style scoped>
-.border-s-lg {
-    border-color: #81c784 !important;
-}
 .text-truncate {
     white-space: nowrap;
     overflow: hidden;

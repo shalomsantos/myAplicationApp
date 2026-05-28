@@ -50,7 +50,7 @@
                                         item.status.id == 5 ||
                                         item.status.id == 6
                                     "
-                                    class="position-relative"
+                                    class="position-relative border-s-lg"
                                 >
                                     <template v-slot:title>
                                         {{ item.projeto.nome }}

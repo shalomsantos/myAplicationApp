@@ -35,7 +35,7 @@
                 <v-btn
                     class="text-none"
                     color="green-darken-1"
-                    prepend-icon="mdi-check"
+                    prepend-icon="mdi-layers-plus"
                     text="Salvar"
                     @click.prevent="insertEvent"
                 />
