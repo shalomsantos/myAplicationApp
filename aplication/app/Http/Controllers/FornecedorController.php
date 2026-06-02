@@ -52,7 +52,36 @@ class FornecedorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $bzeroStore = Fornecedor::insert([
+                'nome_fantasia' => $request->input('nome_fantasia') ?? null,
+                'razao_social'  => $request->input('razao_social') ?? null,
+                'descricao'     => $request->input('descricao') ?? null,
+                'cpf'           => $request->input('cpf') ?? null,
+                'cnpj'          => $request->input('cnpj') ?? null,
+                'endereco'      => $request->input('endereco') ?? null,
+                'contato'       => $request->input('contato') ?? null,
+                'email'         => $request->input('email') ?? null,
+                'created_by'    => auth()->id(),
+                'created_at'    => now(),
+            ]);
+            if ($bzeroStore) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Registro criado com sucesso."
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Houve um erro no procedimento de inserção de registro."
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro ao tentar inserir a base.",
+                'details' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
