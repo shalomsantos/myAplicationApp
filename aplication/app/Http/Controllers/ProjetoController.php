@@ -122,6 +122,7 @@ class ProjetoController extends Controller
                 'tipo_projeto_id' => $request['tipo_projeto_id'],
                 'descricao' => $request['descricao'] ?? '',
                 'updated_by' => auth()->id(),
+                'updated_at' => now(),
             ]);
             if ($projetoAtualizado) {
                 return response()->json([

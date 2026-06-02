@@ -10,9 +10,13 @@ use App\Models\Bzero;
 use App\Models\BzeroPlataforma;
 use App\Models\Plataforma;
 use App\Models\Projeto;
+use App\Services\ProjetoService;
 
 class BzeroController extends Controller
 {
+    public function __construct(
+        protected ProjetoService $projetoService
+    ) {}
     /**
      * Filtra registros de Bzero conforme parâmetros recebidos.
      */

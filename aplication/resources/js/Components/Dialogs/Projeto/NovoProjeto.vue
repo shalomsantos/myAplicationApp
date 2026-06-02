@@ -23,6 +23,7 @@
                 ></v-text-field>
             </v-col>
             <v-col cols="12" class="d-flex ga-2 align-center">
+                {{ tipoProjetosOptions }}
                 <v-combobox
                     v-model="tipoProjetosValue"
                     :items="tipoProjetosOptions"
@@ -115,7 +116,7 @@ const inputProjeto = ref(null);
 const inputDescricao = ref(null);
 
 const tipoProjetosValue = ref(null);
-const tipoProjetosOptions = ref(props.tiposProjetos);
+const tipoProjetosOptions = ref(props.tiposProjetos ?? []);
 
 // Dialog
 const dialogNovoTipoProjeto = ref(false);

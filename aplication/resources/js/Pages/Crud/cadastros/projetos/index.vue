@@ -70,10 +70,17 @@
                                         </v-chip>
                                     </template>
                                     <template #item>
-                                        <v-sheet class="d-flex justify-space-between align-end">
+                                        <v-sheet v-if="!item.updated_at" class="d-flex justify-space-between align-end">
                                             <Avatar :nomeCompleto="item.created_by.name"/>
                                             <p class="text-body-2 text-disabled">
                                                 {{ isDate(item.created_at) }}
+                                            </p>
+                                        </v-sheet>
+                                        <v-sheet v-else class="d-flex justify-space-between align-end">
+                                            <Avatar :nomeCompleto="item.updated_by.name"/>
+                                            <p class="text-body-2 text-disabled">
+                                                <v-icon size="small" icon="mdi-history" color="info" class="mr-1"></v-icon>
+                                                {{ isDate(item.updated_at) }}
                                             </p>
                                         </v-sheet>
                                     </template>
