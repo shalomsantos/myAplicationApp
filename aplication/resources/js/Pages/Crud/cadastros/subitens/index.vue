@@ -27,6 +27,7 @@
                             color="green-darken-1"
                             prepend-icon="mdi-plus"
                             text="Novo subitem"
+                            @click.prevent="dialogNovoSubitem = true"
                         />
                     </v-col>
                 </v-row>
@@ -155,18 +156,23 @@
                 ((subitemSelecionado = null), (dialogEditSubitem = false))
             "
         />
+        <NovoSubitem 
+            v-model="dialogNovoSubitem" 
+            @insertProcess="insertSubitem"
+        />
     </DefaultLayout>
 </template>
 
 <script setup>
 import EditeSubitem from "@/Components/Dialogs/Subitens/EditeSubitem.vue";
-
 import { useFeedback } from "@/Composables/useFeedback";
 import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import EmptyData from "@/Components/EmptyData.vue";
 import axios from "axios";
 import { ref } from "vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
+import NovoSubitem from "@/Components/Dialogs/Subitens/NovoSubitem.vue";
+import { useSubitem } from "@/Composables/useSubitem";
 
 const props = defineProps({
     subitens: Object,
@@ -179,6 +185,7 @@ const location = [
     { title: "Lista", disabled: true },
 ];
 const { trigger } = useFeedback();
+const { store } = useSubitem();
 
 const viewOption = ref(props.preferencias?.listagem_menu ?? 0);
 const dados = ref(props.subitens ?? []);
@@ -188,16 +195,20 @@ const search = ref("");
 const dialogEditSubitem = ref(false);
 const dialogNovoSubitem = ref(false);
 
-async function insertSubitem(item) {}
-
-const carregandoFornecedores = async () => {
-    await axios
-        .get(route("fornecedor.index"))
-        .then((res) => {
-            optionsFornecedor.value = res.data.data;
-        })
-        .catch((err) => trigger(err, "error"));
-};
+async function insertSubitem(item) {
+    try{
+        const res = await store(item);
+        if(res.success) {
+            trigger(res.message, "success");
+            return;
+        }
+        trigger(res.message || 'Erro sem idenficação.', "error");
+    } catch(err) {
+        trigger(err, "error");
+    } finally{
+        carregandoTodasSubitens();
+    }
+}
 const executarBusca = async () => {
     await carregandoTodasSubitens(search.value);
 };

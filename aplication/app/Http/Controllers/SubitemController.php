@@ -47,7 +47,29 @@ class SubitemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $itemStore = Subitem::insert([
+                'nome' => $request->input('nome'),
+                'created_by' => auth()->id(),
+                'created_at' => now(),
+            ]);
+            if ($itemStore) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Registro criado com sucesso."
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Houve um erro na criação do registro."
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro ao tentar inserir registro.",
+                'details' => $e->getMessage()
+            ]);
+        }
     }
 
     /**

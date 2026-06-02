@@ -23,16 +23,13 @@
                     <v-col cols="12">
                         <v-combobox
                             v-model="inputFornecedores"
-                            :items="[
-                                'Demostrativo um',
-                                'Demostrativo Dois',
-                                'Demostrativo três',
-                            ]"
+                            :items="subitem.fornecedores"
+                            item-title="nome_fantasia"
+                            item-value="id"
                             label="Escolher ou inserir subitem"
                             variant="outlined"
                             density="compact"
                             hide-details
-                            item-title="nome"
                             clearable
                         >
                             <template v-slot:prepend-item>
