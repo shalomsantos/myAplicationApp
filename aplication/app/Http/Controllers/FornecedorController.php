@@ -53,7 +53,7 @@ class FornecedorController extends Controller
     public function store(Request $request)
     {
         try {
-            $bzeroStore = Fornecedor::insert([
+            $fornecedorStore = Fornecedor::insert([
                 'nome_fantasia' => $request->input('nome_fantasia') ?? null,
                 'razao_social'  => $request->input('razao_social') ?? null,
                 'descricao'     => $request->input('descricao') ?? null,
@@ -65,7 +65,7 @@ class FornecedorController extends Controller
                 'created_by'    => auth()->id(),
                 'created_at'    => now(),
             ]);
-            if ($bzeroStore) {
+            if ($fornecedorStore) {
                 return response()->json([
                     'success' => true,
                     'message' => "Registro criado com sucesso."
@@ -105,7 +105,56 @@ class FornecedorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            // $request->validate([
+            //     'nome_fantasia' => 'string|max:255',
+            //     'razao_social'  => 'string|max:255',
+            //     'cpf'           => 'integer|max:255|Nullable',
+            //     'cnpj'          => 'integer|max:255|Nullable',
+            //     'endereco'      => 'string|max:255',
+            //     'contato'       => 'string|max:255',
+            //     'email'         => 'string|max:255',
+            //     'descricao'     => 'string|max:255',
+            // ]);
+
+            $fornecedor = Fornecedor::find($id);
+
+            if (!$fornecedor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Projeto com ID: {$id} não encontrado."
+                ], 404);
+            }
+
+            $fornecedorUpdate = $fornecedor->update([
+                'nome_fantasia' => $request->input('nome_fantasia'),
+                'razao_social'  => $request->input('razao_social'),
+                'cpf'           => $request->input('cpf'),
+                'cnpj'          => $request->input('cnpj'),
+                'endereco'      => $request->input('endereco'),
+                'contato'       => $request->input('contato'),
+                'email'         => $request->input('email'),
+                'descricao'     => $request->input('descricao'),
+                'updated_by'    => auth()->id(),
+                'updated_at'    => now(),
+            ]);
+            if ($fornecedorUpdate) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Registro atualizado com sucesso."
+                ]);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => "Não foi possivel realizar atualização do registro."
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => "Erro ao tentar atualizar o registro.",
+                'details' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

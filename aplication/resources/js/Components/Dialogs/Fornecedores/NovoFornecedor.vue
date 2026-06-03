@@ -3,7 +3,17 @@
         v-model="model"
         title="Novo fornecedor"
         width="60vw"
-        @onCloseDialog="$emit('onCloseDialog')"
+        @onCloseDialog="(
+            (razao_social=null),
+            (nome_fantasia=null),
+            (opcaoSelecionada=null),
+            (cpf=null),
+            (cnpj=null),
+            (endereco=null),
+            (contato=null),
+            (email=null),
+            (descricao=null),
+            (model=false))"
     >
         <v-row>
             <v-col cols="6">
@@ -35,22 +45,22 @@
                             <v-radio label="CPF" value="1"></v-radio>
                             <v-radio label="CNPJ" value="2"></v-radio>
                         </v-radio-group>
-        
+
                         <v-text-field
                             v-if="opcaoSelecionada == 1"
                             v-model="cpf"
-                            label="CPF"
+                            label="000.000.000-00"
                             density="compact"
                             color="green-darken-3"
                             variant="outlined"
                             hide-details="auto"
                             clearable
                         ></v-text-field>
-        
+
                         <v-text-field
                             v-else
                             v-model="cnpj"
-                            label="CNPJ"
+                            label="00.000.000/0000-00"
                             density="compact"
                             color="green-darken-3"
                             variant="outlined"
@@ -96,7 +106,7 @@
             </v-col>
             <v-col cols="12">
                 <v-textarea
-                    v-model="inputDescricao"
+                    v-model="descricao"
                     label="Descrição"
                     variant="outlined"
                     density="compact"
@@ -123,25 +133,77 @@
 
 <script setup>
 import Dialog from "../Dialog.vue";
+import { useFeedback } from "@/Composables/useFeedback.js";
+import { useFornecedor } from "@/Composables/useFornecedor.js";
 import { ref } from "vue";
 
 const model = defineModel();
+const { store } = useFornecedor();
+const { trigger } = useFeedback();
+const emit = defineEmits(["end"]);
 
-const opcaoSelecionada = ref('1')
-const inputFornecedorRazaoSocial = ref("");
-const razao_social = ref("Anthony e Danilo Consultoria Financeira Ltda");
-const nome_fantasia = ref("Sônia e Isaac Pizzaria Ltda");
-const cpf = ref("999.999.999-99");
-const cnpj = ref("99.999.999/9999-99");
-const endereco = ref("Rua julio silva, 261 - Praia do futuro - CE.");
-const contato = ref("85 9 5241-5241");
-const email = ref("shalomsantos1234@gmail.com");
-const inputDescricao = ref("lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc. Donec auctor, nisl eget ultricies lacinia, nunc nisl aliquam nisl, eget aliquam nunc nisl eget nunc.");
+const razao_social = ref(null);
+const nome_fantasia = ref(null);
+const opcaoSelecionada = ref("1");
+const cpf = ref(null);
+const cnpj = ref(null);
+const endereco = ref(null);
+const contato = ref(null);
+const email = ref(null);
+const descricao = ref(null);
 
+async function insertProcess() {
+    let validNomeFantasia = nome_fantasia.value == null || nome_fantasia.value.trim() == "";
+    let validRazaoSocial = razao_social.value == null || razao_social.value.trim() == "";
+    if (validNomeFantasia || validRazaoSocial) {
+        trigger(
+            "Por favor, informe a razão social ou apenas o nome fantasia.",
+            "warning",
+        );
+        return;
+    }
+    if (opcaoSelecionada.value === "1") {
+        if (cpf.value == null || cpf.value.trim() == "") {
+            trigger("Por favor, informe um CPF.", "warning");
+            return;
+        }
+    } else if (opcaoSelecionada.value === "2") {
+        if (cnpj.value == null || cnpj.value.trim() == "") {
+            trigger("Por favor, informe um CNPJ.", "warning");
+            return;
+        }
+    }
+    if (endereco.value == null || endereco.value.trim() == "") {
+        trigger("Por favor, informe um endereço.", "warning");
+        return;
+    }
+    let validContato = contato.value == null || contato.value.trim() == "";
+    let validEmail = email.value == null || email.value.trim() == "";
+    if (validContato || validEmail) {
+        trigger("Por favor, informe ao menos um meio de contato.", "warning");
+        return;
+    }
+    let data = {
+        nome_fantasia: nome_fantasia.value,
+        razao_social: razao_social.value,
+        descricao: descricao.value,
+        cpf: opcaoSelecionada.value === "1" ? cpf.value : null,
+        cnpj: opcaoSelecionada.value === "2" ? cnpj.value : null,
+        endereco: endereco.value,
+        contato: contato.value,
+        email: email.value,
+    };
+    let res;
 
-function insertProcess(){
-
+    try {
+        res = await store(data);
+    } catch (error) {
+        trigger(error, "erro");
+    } finally {
+        model.value = false
+        emit("end", res);
+    }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

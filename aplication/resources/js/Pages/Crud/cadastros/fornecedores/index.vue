@@ -125,18 +125,13 @@
         <EditeFornecedor
             v-model="dialogEditeFornecedor"
             :fornecedor="fornecedorSelecionado"
-            @onCloseDialog="
-                ((dialogEditeFornecedor = false),
-                (fornecedorSelecionado = null))
-            "
+            @end="endEditeFornecedor"
         />
         
         <NovoFornecedor
             v-model="dialogNovoFornecedor"
-            @onCloseDialog="dialogNovoFornecedor = false"
+            @end="endNovoFornecedor"
         />
-
-        <NormalFeedback v-model="feedback"></NormalFeedback>
     </DefaultLayout>
 </template>
 
@@ -145,16 +140,20 @@ import DefaultLayout from "@/Layouts/DefaultLayout.vue";
 import EditeFornecedor from "@/Components/Dialogs/Fornecedores/EditeFornecedor.vue";
 import NovoFornecedor from "@/Components/Dialogs/Fornecedores/NovoFornecedor.vue";
 import EmptyData from "@/Components/EmptyData.vue";
-import NormalFeedback from "@/Components/Feedback/NormalFeedback.vue";
 import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
+import { useFeedback } from "@/Composables/useFeedback";
+import { useFornecedor } from "@/Composables/useFornecedor";
 
 const props = defineProps({
     fornecedores: Object,
     user: Object,
     preferencias: Object,
 });
+
+const { trigger } = useFeedback();
+const { index } = useFornecedor();
 
 const location = [
     { title: "Kronos", disabled: false, href: "/" },
@@ -187,29 +186,37 @@ const updatePage = (page) => {
     );
 };
 
-// Feedback
-const feedback = ref({
-    show: false,
-    timeout: 2000,
-    color: "success",
-    text: "",
-});
+async function endEditeFornecedor(response) {
+    if (response.success) {
+        trigger(response.message, "success");
+        await carregandoTodasFornecedores("");
+        return;
+    } else {
+        trigger(response.message || "Erro desconhecido.", "error");
+        return;
+    }
+}
+async function endNovoFornecedor(response) {
+    if (response.success) {
+        trigger(response.message, "success");
+        await carregandoTodasFornecedores("");
+        return;
+    } else {
+        trigger(response.message || "Erro desconhecido.", "error");
+        return;
+    }
+}
 
 function executarBusca() {
     carregandoTodasFornecedores(search.value);
 }
 async function carregandoTodasFornecedores(termo = "") {
-    await axios
-        .get(route("fornecedor.index"), {
-            params: { search: termo },
-            headers: {
-                Accept: "application/json",
-            },
-        })
-        .then((res) => {
-            dados.value = res.data;
-        })
-        .catch((err) => console.log(err));
+    try{
+        const res = await index(termo);
+        dados.value = res;
+    } catch (error) {
+        trigger(error, "error");
+    }
 }
 </script>
 
