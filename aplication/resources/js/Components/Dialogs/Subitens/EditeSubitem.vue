@@ -76,7 +76,7 @@
                             <th class="text-left">Razão social</th>
                             <th class="text-left">Criado em</th>
                             <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>

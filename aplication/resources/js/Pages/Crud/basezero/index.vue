@@ -87,7 +87,7 @@
                             <th class="text-left">Subitens</th>
                             <th class="text-left">Criado em</th>
                             <th class="text-left">Criado por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>

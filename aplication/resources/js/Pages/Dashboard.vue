@@ -79,24 +79,8 @@
                                                     </p>
                                                 </div>
                                             </v-col>
-                                            <v-col cols="2">
-                                                <p class="text-body-2">
-                                                    Criado em
-                                                </p>
-                                                <div>
-                                                    <p
-                                                        class="text-body-2 text-disabled"
-                                                    >
-                                                        {{
-                                                            isDate(
-                                                                item.created_at,
-                                                            )
-                                                        }}
-                                                    </p>
-                                                </div>
-                                            </v-col>
-                                            <v-col cols="2">
-                                                <Avatar :nomeCompleto="item.created_by.name"/>
+                                            <v-col>
+                                                <Avatar :avatar="item"/>
                                             </v-col>
                                             <v-col cols="6" class="d-flex ga-3">
                                                 <v-btn
@@ -208,8 +192,7 @@
                                     <th class="text-left">Projeto</th>
                                     <th class="text-left">Status</th>
                                     <th class="text-left">Ano</th>
-                                    <th class="text-left">Criado em</th>
-                                    <th class="text-left">Por</th>
+                                    <th class="text-center">Por</th>
                                     <th class="text-left"></th>
                                 </tr>
                             </thead>
@@ -226,17 +209,10 @@
                                     </td>
                                     <td>{{ item.status.nome }}</td>
                                     <td>{{ item.ano }}</td>
-                                    <td>{{ isDate(item.created_at) }}</td>
-                                    <td>
-                                        <Avatar :nomeCompleto="item.created_by.name"/>
+                                    <td style="width: 200px;">
+                                        <Avatar :avatar="item"/>
                                     </td>
                                     <td>
-                                        <!-- <v-btn
-                                            class="text-none me-1"
-                                            icon="mdi-delete"
-                                            density="compact"
-                                            color="red-lighten-2"
-                                        ></v-btn> -->
                                         <v-menu location="top">
                                             <template v-slot:activator="{ props }">
                                                 <v-btn

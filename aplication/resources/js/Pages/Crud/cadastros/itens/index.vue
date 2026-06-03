@@ -51,27 +51,10 @@
                             "
                             class="h-100 d-flex flex-column border-s-lg" 
                         >
-                            <template #subtitle>
-                                <v-sheet class="d-flex justify-space-between align-end" color="transparent">
-                                    <Avatar :nomeCompleto="item.created_by.name" />
-                                    <p class="text-body-2 text-disabled">
-                                        {{ isDate(item.created_at) }}
-                                    </p>
-                                </v-sheet>
-                            </template>
                             <template #item>
-                                <v-sheet
-                                    class="d-flex flex-wrap ga-2 bg-transparent pt-3"
-                                >
-                                    <v-chip
-                                        size="x-small"
-                                        color="green"
-                                        variant="flat"
-                                        v-for="(subitem, id) in item.subitens"
-                                        :key="id"
-                                    >
-                                        {{ subitem.nome }}
-                                    </v-chip>
+                                <v-sheet color="transparent" class="d-flex flex-column ga-3">
+                                    <Avatar :avatar="item" />
+                                    <MultItens :item="item" entity="subitens"/>
                                 </v-sheet>
                             </template>
                         </v-card>
@@ -88,9 +71,8 @@
                         <tr>
                             <th class="text-left">Nome</th>
                             <th class="text-left">Subitens</th>
-                            <th class="text-left">Criado em</th>
-                            <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-center">Por</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -104,33 +86,10 @@
                         >
                             <td>{{ item.nome }}</td>
                             <td>
-                                <v-chip
-                                    v-for="(
-                                        subitem, idx
-                                    ) in item.subitens.slice(0, 2)"
-                                    :key="idx"
-                                    size="x-small"
-                                    color="green-darken-1"
-                                    variant="tonal"
-                                    class="font-weight-bold"
-                                >
-                                    {{ subitem.nome }}
-                                </v-chip>
-                                <v-btn
-                                    v-if="item.subitens.length > 2"
-                                    class="text-none text-grey-darken-1 cursor-pointer"
-                                    variant="text"
-                                    @click.prevent="
-                                        ((itemSelecionado = item),
-                                        (dialogEditeItem = true))
-                                    "
-                                >
-                                    +{{ item.subitens.length - 2 }} itens
-                                </v-btn>
+                                <MultItens :item="item" entity="subitens"/>
                             </td>
-                            <td>{{ isDate(item.created_at) }}</td>
-                            <td>
-                                <Avatar :nomeCompleto="item.created_by.name"/>
+                            <td style="width: 200px;">
+                                <Avatar :avatar="item"/>
                             </td>
                             <td>
                                 <v-btn
@@ -169,6 +128,7 @@ import EmptyData from "@/Components/EmptyData.vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
 import { ref, watch } from "vue";
 import { useItem } from "@/Composables/useItem";
+import MultItens from "@/Components/Bases/MultItens.vue";
 
 const props = defineProps({
     itens: Object,

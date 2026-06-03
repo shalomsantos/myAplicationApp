@@ -66,7 +66,7 @@
                         <th class="text-left">Cargo</th>
                         <th class="text-left">Criado em</th>
                         <th class="text-left">Preferência(Listas)</th>
-                        <th class="text-left">***</th>
+                        <th class="text-left"></th>
                     </tr>
                 </thead>
                 <tbody>

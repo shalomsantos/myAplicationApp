@@ -93,20 +93,17 @@
                     <thead>
                         <tr>
                             <th class="text-left">Subitem</th>
-                            <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-center">Por</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, id) in item?.subitens" :key="id">
                             <td>
                                 {{ item.nome }}<br />
-                                <p class="text-body-2 text-disabled">
-                                    {{ isDate(item.created_at) }}
-                                </p>
                             </td>
-                            <td>
-                                <Avatar :nomeCompleto="item.created_by.name" />
+                            <td style="width: 200px;">
+                                <Avatar :avatar="item" />
                             </td>
                             <td>
                                 <v-btn

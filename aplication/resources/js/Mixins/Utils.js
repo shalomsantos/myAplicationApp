@@ -17,9 +17,17 @@ export default {
 
       return formatter.format(data);
     },
-    avatarNick(completeName){
-      const nomes = completeName.split(" ") // Admin admin
-      return nomes[0].charAt(0) + nomes.pop().charAt(0); // first[0] + last[0]
+    avatarNick(completeName) {
+      if (!completeName || typeof completeName !== 'string' || !completeName.trim()) return "__";
+      
+      const nomes = completeName.trim().split(/\s+/);
+
+      if (nomes.length === 1) return nomes[0].slice(0, 2).toUpperCase();
+
+      const primeiraLetra = nomes[0].charAt(0);
+      const ultimaLetra = nomes.pop().charAt(0);
+
+      return (primeiraLetra + ultimaLetra).toUpperCase();
     }
   },
 };

@@ -33,7 +33,7 @@
                 </v-row>
             </v-col>
             <v-col
-                cols="6"
+                cols="4"
                 v-if="dados.data.length > 0 && viewOption"
                 v-for="(item, id) in dados.data"
                 :key="id"
@@ -51,13 +51,8 @@
                                 (dialogEditeFornecedor = true))
                             "
                         >
-                            <template #subtitle>
-                                <v-sheet class="d-flex justify-space-between align-end" color="transparent">
-                                    <Avatar :nomeCompleto="item.created_by.name"/>
-                                    <p class="text-body-2 text-disabled">
-                                        {{ isDate(item.created_at) }}
-                                    </p>
-                                </v-sheet>
+                            <template #item>
+                                <Avatar :avatar="item"/>
                             </template>
                         </v-card>
                     </template>
@@ -71,10 +66,9 @@
                 >
                     <thead>
                         <tr>
-                            <th class="text-left">Nome</th>
-                            <th class="text-left">Criado em</th>
-                            <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-left">Nome fantasia</th>
+                            <th class="text-center">Por</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -86,10 +80,9 @@
                                 (dialogEditeFornecedor = true))
                             "
                         >
-                            <td>{{ item.razao_social }}</td>
-                            <td>{{ isDate(item.created_at) }}</td>
-                            <td>
-                                <Avatar :nomeCompleto="item.created_by.name"/>
+                            <td>{{ item.nome_fantasia }}</td>
+                            <td style="width: 200px;">
+                                <Avatar :avatar="item"/>
                             </td>
                             <td>
                                 <v-btn

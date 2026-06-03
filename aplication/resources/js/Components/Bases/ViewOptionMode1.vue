@@ -87,7 +87,7 @@
                     <th class="text-left">Ano</th>
                     <th class="text-left">Criado em</th>
                     <th class="text-left">Criador por</th>
-                    <th class="text-left">***</th>
+                    <th class="text-left"></th>
                 </tr>
             </thead>
             <tbody>

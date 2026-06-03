@@ -32,7 +32,7 @@
                     </v-col>
                 </v-row>
             </v-col>
-            <v-col cols="6" v-if="dados.length > 0 && viewOption" v-for="(item, id) in dados" :key="id">
+            <v-col cols="4" v-if="dados.length > 0 && viewOption" v-for="(item, id) in dados" :key="id">
                 <v-hover class="h-100">
                     <template v-slot:default="{ isHovering, props }">
                         <v-card
@@ -46,35 +46,10 @@
                             :elevation="isHovering ? 3 : 1"
                             class="h-100 d-flex flex-column border-s-lg" 
                         >
-                            <template #subtitle>
-                                <v-sheet class="d-flex justify-space-between align-end" color="transparent">
-                                    <Avatar :nomeCompleto="item.created_by.name"/>
-                                    <p class="text-body-2 text-disabled">
-                                        {{ isDate(item.created_at) }}
-                                    </p>
-                                </v-sheet>
-                            </template>
                             <template #item>
-                                <v-sheet
-                                    class="d-flex flex-wrap ga-2 bg-transparent pt-3"
-                                >
-                                    <v-chip
-                                        v-if="item.itens?.length > 0"
-                                        size="x-small"
-                                        color="green"
-                                        variant="flat"
-                                        v-for="(item1, id) in item.itens"
-                                        :key="id"
-                                    >
-                                        {{ item1.nome }}
-                                    </v-chip>
-                                    <v-chip
-                                        v-else
-                                        size="x-small"
-                                        color="green"
-                                        style="width: 10rem;"
-                                    >
-                                    </v-chip>
+                                <v-sheet color="transparent" class="d-flex flex-column ga-3">
+                                    <Avatar :avatar="item"/>
+                                    <MultItens :item="item" entity="itens"/>
                                 </v-sheet>
                             </template>
                         </v-card>
@@ -90,9 +65,9 @@
                     <thead>
                         <tr>
                             <th class="text-left">Nome</th>
-                            <th class="text-left">Criado em</th>
-                            <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-left">Itens</th>
+                            <th class="text-center">Por</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,9 +80,11 @@
                             "
                         >
                             <td>{{ item.nome }}</td>
-                            <td>{{ isDate(item.created_at) }}</td>
                             <td>
-                                <Avatar :nomeCompleto="item.created_by?.name"/>
+                                <MultItens :item="item" entity="itens"/>
+                            </td>
+                            <td style="width: 200px;">
+                                <Avatar :avatar="item"/>
                             </td>
                             <td>
                                 <v-btn
@@ -152,6 +129,7 @@ import EmptyData from "@/Components/EmptyData.vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
 import axios from "axios";
 import { ref } from "vue";
+import MultItens from "@/Components/Bases/MultItens.vue";
 
 const props = defineProps({
     plataformas: Object,

@@ -70,19 +70,7 @@
                                         </v-chip>
                                     </template>
                                     <template #item>
-                                        <v-sheet v-if="!item.updated_at" class="d-flex justify-space-between align-end">
-                                            <Avatar :nomeCompleto="item.created_by.name"/>
-                                            <p class="text-body-2 text-disabled">
-                                                {{ isDate(item.created_at) }}
-                                            </p>
-                                        </v-sheet>
-                                        <v-sheet v-else class="d-flex justify-space-between align-end">
-                                            <Avatar :nomeCompleto="item.updated_by.name"/>
-                                            <p class="text-body-2 text-disabled">
-                                                <v-icon size="small" icon="mdi-history" color="info" class="mr-1"></v-icon>
-                                                {{ isDate(item.updated_at) }}
-                                            </p>
-                                        </v-sheet>
+                                        <Avatar :avatar="item"/>
                                     </template>
                                 </v-card>
                             </template>
@@ -98,9 +86,8 @@
                                 <tr>
                                     <th class="text-left">Nome</th>
                                     <th class="text-left">Tipo</th>
-                                    <th class="text-left">Criado em</th>
-                                    <th class="text-left">Por</th>
-                                    <th class="text-left">***</th>
+                                    <th class="text-center">Por</th>
+                                    <th class="text-left"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -114,9 +101,8 @@
                                 >
                                     <td>{{ item.nome }}</td>
                                     <td>{{ item.tipo_projeto.nome }}</td>
-                                    <td>{{ isDate(item.created_at) }}</td>
-                                    <td>
-                                        <Avatar :nomeCompleto="item.created_by.name"/>
+                                    <td style="width: 200px;">
+                                        <Avatar :avatar="item"/>
                                     </td>
                                     <td>
                                         <v-btn

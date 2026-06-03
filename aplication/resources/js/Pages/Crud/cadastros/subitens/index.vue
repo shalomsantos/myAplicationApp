@@ -33,7 +33,7 @@
                 </v-row>
             </v-col>
             <v-col
-                cols="6"
+                cols="4"
                 v-if="dados.length > 0 && viewOption"
                 v-for="(item, id) in dados"
                 :key="id"
@@ -51,29 +51,10 @@
                                 (dialogEditSubitem = true))
                             "
                         >
-                            <template #subtitle>
-                                <v-sheet class="d-flex justify-space-between align-end" color="transparent">
-                                    <Avatar :nomeCompleto="item.created_by.name" />
-                                    <p class="text-body-2 text-disabled">
-                                        {{ isDate(item.created_at) }}
-                                    </p>
-                                </v-sheet>
-                            </template>
                             <template #item>
-                                <v-sheet
-                                    class="d-flex flex-wrap ga-2 bg-transparent pt-3"
-                                >
-                                    <v-chip
-                                        size="x-small"
-                                        color="green"
-                                        variant="flat"
-                                        v-for="(
-                                            fornecedor, id
-                                        ) in item.fornecedores"
-                                        :key="id"
-                                    >
-                                        {{ fornecedor.razao_social }}
-                                    </v-chip>
+                                <v-sheet color="transparent" class="d-flex flex-column ga-3">
+                                    <Avatar :avatar="item" />
+                                    <MultItens :item="item" entity="fornecedores"/>
                                 </v-sheet>
                             </template>
                         </v-card>
@@ -90,9 +71,8 @@
                         <tr>
                             <th class="text-left">Nome</th>
                             <th class="text-left">Subitens</th>
-                            <th class="text-left">Criado em</th>
-                            <th class="text-left">Por</th>
-                            <th class="text-left">***</th>
+                            <th class="text-center">Por</th>
+                            <th class="text-left"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,9 +107,8 @@
                                     +{{ item.fornecedores.length - 2 }} itens
                                 </a>
                             </td>
-                            <td>{{ isDate(item.created_at) }}</td>
-                            <td>
-                                <Avatar :nomeCompleto="item.created_by.name"/>
+                            <td style="width: 200px;">
+                                <Avatar :avatar="item"/>
                             </td>
                             <td>
                                 <v-btn
@@ -173,6 +152,7 @@ import { ref } from "vue";
 import Avatar from "@/Components/Bases/Avatar.vue";
 import NovoSubitem from "@/Components/Dialogs/Subitens/NovoSubitem.vue";
 import { useSubitem } from "@/Composables/useSubitem";
+import MultItens from "@/Components/Bases/MultItens.vue";
 
 const props = defineProps({
     subitens: Object,
